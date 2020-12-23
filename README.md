@@ -3,7 +3,7 @@ THis is the code used to automate the analysis
 
 
 
-
+![stock Market](Images/stockmarket.jpg)
 
 
 I have used VBA scripting to analyze real stock market data. The tasks is to create a script that will loop through all the stocks for one year and output the following information.
@@ -17,7 +17,7 @@ I have used VBA scripting to analyze real stock market data. The tasks is to cre
   4- The total stock volume of the stock.
 
 
-
+![moderate_solution](Images/moderate_solution.png)
 
 
 
