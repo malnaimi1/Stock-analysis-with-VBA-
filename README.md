@@ -19,9 +19,8 @@ Sub Homework()
     
    
     'loop
-   Lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
-    
-    
+    Lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        
     For Row = starting_row To Lastrow
         
        'THINGS THAT SHOULD HAPPEN AT THE STARTING OF A NEW TICKER
