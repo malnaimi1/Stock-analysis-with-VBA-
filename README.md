@@ -1,9 +1,29 @@
 # Stock-analysis-with-VBA-
 THis is the code used to automate the analysis 
 
-Sub Homework()
+
+
+
+
+
+I have used VBA scripting to analyze real stock market data. The tasks is to create a script that will loop through all the stocks for one year and output the following information.
+
+  1- The ticker symbol.
+
+  2- Yearly change from opening price at the beginning of a given year to the closing price at the end of that year.
+
+  3- The percent change from opening price at the beginning of a given year to the closing price at the end of that year.
+
+  4- The total stock volume of the stock.
+
+
+
+
+
+
+    Sub Homework()
     
- For Each ws In Worksheets
+    For Each ws In Worksheets
  
     ws.Cells(1, 9).Value = "Ticker"
     ws.Cells(1, 10).Value = "Yearly Change"
@@ -73,5 +93,5 @@ Sub Homework()
         End If
         
     Next Row
-Next ws
-End Sub
+    Next ws
+    End Sub
