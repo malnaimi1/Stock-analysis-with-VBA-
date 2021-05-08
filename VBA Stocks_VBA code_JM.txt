@@ -1,0 +1,149 @@
+Sub stock():
+
+    ' for each ticker symbol on Sheet 2014
+    ' copy down the distinct tickers in column A
+    ' compute the year change between the first and last day of the data for that ticker
+    ' compute the percentage change for the first and last day of the data for that ticker
+    ' compute the total stock volume for that ticker
+    ' loop through each of the worksheets 2014 - 2016 and perform the above actions on each sheet
+    
+    Dim TotalVolume As Double
+    Dim Row As Long
+    Dim CurrentTicker As String
+    Dim SummaryRow As Long
+    Dim TickerCount As Long
+    Dim MaxIncrease As Double
+    Dim MaxIncreaseTicker As String
+    Dim MinIncrease As Double
+    Dim minIncreaseTicker As String
+    Dim MaxVolume As Double
+    Dim MaxVolumeTicker As String
+    Dim i As Long
+    Dim j As Long
+    Dim k As Long
+          
+For Each ws In Worksheets
+    
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    
+    SummaryRow = 2
+    TotalVolume = 0
+    TickerCount = 0
+    MaxIncrease = 0
+    MinIncrease = 0
+    MaxVolume = 0
+    i = 0
+    j = 0
+    k = 0
+    Row = 2
+            
+    ' Loop through stocks
+    
+    For Row = 2 To LastRow
+        
+        ' Record ticker symbol
+        CurrentTicker = ws.Cells(Row, 1).Value
+        
+        ' Start counting the number of rows for a single ticker symbol
+        TickerCount = TickerCount + 1
+             
+        ' Add current volume to total
+        TotalVolume = TotalVolume + ws.Cells(Row, 7).Value
+               
+        'Check if next ticker symbol row is not the same as the current ticker symbol
+        If CurrentTicker <> ws.Cells(Row + 1, 1).Value Then
+           
+            ws.Cells(1, 9).Value = "<ticker>"
+            ws.Cells(1, 10).Value = "Yearly Change"
+            ws.Cells(1, 11).Value = "Percent Change"
+            ws.Cells(1, 12).Value = "Total Stock Volume"
+            ws.Range("I1:L1").Font.Bold = True
+            ws.Cells(SummaryRow, 9).Value = CurrentTicker
+            ws.Cells(SummaryRow, 10).Value = ws.Cells(Row, 6).Value - ws.Cells(Row - TickerCount + 1, 6).Value
+            
+            If (Cells(SummaryRow, 10).Value <= 0) Then
+                ' Conditionally format the Cell Colors to Red if value is below 0
+                ws.Cells(SummaryRow, 10).Interior.Color = RGB(255, 0, 0)
+            Else
+                ' Conditionally format the Cell Colors to Green if value is above 0
+                ws.Cells(SummaryRow, 10).Interior.Color = RGB(0, 255, 0)
+            End If
+            
+            ' compute the returns, checking if the denominator is 0 before doing so to avoid the overflow error!
+            If ws.Cells(Row - TickerCount + 1, 6).Value = 0 Then
+               ws.Cells(SummaryRow, 11).Value = 0
+                Else
+                 ws.Cells(SummaryRow, 11).Value = (ws.Cells(Row, 6).Value) / (ws.Cells(Row - TickerCount + 1, 6).Value) - 1
+            End If
+            
+            ws.Cells(SummaryRow, 11).NumberFormat = "0.00%"
+            ws.Cells(SummaryRow, 12).Value = TotalVolume
+            SummaryRow = SummaryRow + 1
+               
+            ' reset total volume and TickerCount to 0
+            TotalVolume = 0
+            TickerCount = 0
+            FinalPrice = 0
+            
+             ' reset ticker symbol to the next stock
+            CurrentTicker = ws.Cells(Row + 1, 1).Value
+                       
+        End If
+                   
+      Next Row
+      
+        ' Challenge question
+        LastRowChallenge = ws.Cells(Rows.Count, 10).End(xlUp).Row
+        ws.Cells(2, 15).Value = "Greatest % increase"
+        ws.Cells(3, 15).Value = "Greatest % decrease"
+        ws.Cells(4, 15).Value = "Greatest Total Volume"
+        ws.Cells(1, 16).Value = "Ticker"
+        ws.Cells(1, 17).Value = "Value"
+        ws.Cells(2, 17).NumberFormat = "0.00%"
+        ws.Cells(3, 17).NumberFormat = "0.00%"
+        
+        ' loop through the annual % returns to find the max returns and record them and their corresponding ticker symbol.
+        
+        For i = 2 To LastRowChallenge
+            If ws.Cells(i, 11).Value >= MaxIncrease Then
+                MaxIncrease = ws.Cells(i, 11).Value
+                MaxIncreaseTicker = ws.Cells(i, 9).Value
+            
+            End If
+        Next i
+        
+        ' loop through the annual % returns to find the min returns and record them and their corresponding ticker symbol.
+        For j = 2 To LastRowChallenge
+            If ws.Cells(j, 11).Value <= MinIncrease Then
+                MinIncrease = ws.Cells(j, 11).Value
+                minIncreaseTicker = ws.Cells(j, 9).Value
+            
+            End If
+        Next j
+  
+        ' loop through the total volumes to find the max and record them and their corresponding ticker symbol.
+        For k = 2 To LastRowChallenge
+            If ws.Cells(k, 12).Value >= MaxVolume Then
+                MaxVolume = ws.Cells(k, 12).Value
+                MaxVolumeTicker = ws.Cells(k, 9).Value
+            
+            End If
+        Next k
+
+        ws.Cells(2, 17).Value = MaxIncrease
+        ws.Cells(3, 17).Value = MinIncrease
+        ws.Cells(4, 17).Value = MaxVolume
+        ws.Cells(2, 16).Value = MaxIncreaseTicker
+        ws.Cells(3, 16).Value = minIncreaseTicker
+        ws.Cells(4, 16).Value = MaxVolumeTicker
+        
+        MaxIncrease = 0
+        MinIncrease = 0
+        MaxVolume = 0
+
+
+Next ws
+End Sub
+
+
+
